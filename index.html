@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PSNS | Cyberpunk Systems</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --bg: #030305;
+        --panel: rgba(15, 15, 20, 0.95);
+        --cyan: #00f3ff;
+        --pink: #ff00ff;
+        --yellow: #fcee0a;
+        --text-main: #e0e0e0;
+        --text-muted: #9ca3af;
+        --border: 1px solid rgba(0, 243, 255, 0.3);
+        --glass: rgba(5, 5, 10, 0.9);
+      }
+
+      /* RESET */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        cursor: none;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text-main);
+        font-family: "Rajdhani", sans-serif;
+        overflow-x: hidden;
+        background-image: linear-gradient(
+            rgba(0, 243, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        min-height: 100vh;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      .btn {
+        font-family: "Orbitron", sans-serif;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      /* SCROLLBAR */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--cyan);
+        border-radius: 4px;
+      }
+
+      /* CURSOR */
+      #cursor {
+        position: fixed;
+        width: 30px;
+        height: 30px;
+        border: 2px solid var(--cyan);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        transition: width 0.15s, height 0.15s;
+        mix-blend-mode: difference;
+      }
+      #cursor-dot {
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        background: var(--pink);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
+      }
+      body.hovering #cursor {
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 243, 255, 0.1);
+        border-color: var(--pink);
+      }
+
+      /* --- NAVIGATION & DROPDOWNS --- */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 5%;
+        height: 80px;
+        background: var(--glass);
+        border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+        backdrop-filter: blur(15px);
+      }
+      .logo {
+        font-size: 26px;
+        font-weight: 900;
+        color: var(--cyan);
+        text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 30px;
+        list-style: none;
+        height: 100%;
+        align-items: center;
+      }
+      .nav-item {
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 15px;
+        transition: 0.3s;
+        position: relative;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .nav-link:hover {
+        color: var(--pink);
+        text-shadow: 0 0 8px var(--pink);
+      }
+
+      /* Dropdown Menu */
+      .dropdown {
+        position: absolute;
+        top: 80px;
+        left: 0;
+        background: #000;
+        border: 1px solid var(--cyan);
+        min-width: 260px;
+        display: none;
+        flex-direction: column;
+        box-shadow: 0 10px 30px rgba(0, 243, 255, 0.2);
+      }
+      .nav-item:hover .dropdown {
+        display: flex;
+        animation: slideDown 0.3s ease;
+      }
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .dropdown a {
+        padding: 15px 20px;
+        color: #aaa;
+        text-decoration: none;
+        font-size: 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: 0.2s;
+      }
+      .dropdown a:hover {
+        background: rgba(0, 243, 255, 0.1);
+        color: var(--cyan);
+        padding-left: 25px;
+      }
+
+      .btn {
+        background: transparent;
+        color: var(--cyan);
+        padding: 10px 25px;
+        border: 1px solid var(--cyan);
+        font-weight: 700;
+        font-size: 14px;
+        clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        transition: 0.3s;
+        position: relative;
+      }
+      .btn:hover {
+        background: rgba(0, 243, 255, 0.1);
+        color: #fff;
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+      }
+
+      .mobile-menu-btn {
+        display: none;
+        font-size: 24px;
+        color: var(--cyan);
+        background: none;
+        border: none;
+      }
+      #mobile-nav {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: #000;
+        border-bottom: 1px solid var(--pink);
+        padding: 20px;
+        display: none;
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+      }
+      #mobile-nav.active {
+        display: flex;
+      }
+
+      /* LAYOUT */
+      .view-section {
+        display: none;
+        padding: 60px 5%;
+        min-height: 80vh;
+        animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .view-section.active {
+        display: block;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* HOME HERO */
+      .hero {
+        display: flex;
+        align-items: center;
+        min-height: 85vh;
+        gap: 50px;
+      }
+      .hero-text h1 {
+        font-size: 64px;
+        line-height: 1;
+        margin-bottom: 25px;
+      }
+      .hero-text h1 span {
+        color: var(--cyan);
+        text-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+      }
+      .hero-text p {
+        font-size: 20px;
+        color: var(--text-muted);
+        margin-bottom: 40px;
+        border-left: 3px solid var(--pink);
+        padding-left: 20px;
+      }
+      .hero-img img {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 0 40px rgba(0, 243, 255, 0.2));
+        animation: float 5s infinite ease-in-out;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      /* CARDS & GRID */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        padding: 35px;
+        transition: 0.3s;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(5px);
+      }
+      .card:hover {
+        border-color: var(--pink);
+        box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+        transform: translateY(-5px);
+      }
+      .card-icon {
+        font-size: 32px;
+        color: var(--cyan);
+        margin-bottom: 20px;
+      }
+      .card h3 {
+        color: #fff;
+        margin-bottom: 10px;
+        font-size: 20px;
+      }
+      .card p {
+        color: var(--text-muted);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      /* ABOUT COMPONENTS */
+      .team-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--cyan);
+        margin: 0 auto 15px;
+        display: block;
+      }
+      .pricing-card {
+        border: 1px solid var(--border);
+        padding: 40px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.3);
+      }
+      .pricing-card.featured {
+        border-color: var(--pink);
+        box-shadow: 0 0 20px rgba(255, 0, 255, 0.1);
+      }
+      .price {
+        font-size: 40px;
+        color: var(--yellow);
+        font-family: "Orbitron";
+        margin: 20px 0;
+      }
+
+      /* PROCESS STEPS */
+      .process-row {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 30px;
+        border-left: 2px solid var(--cyan);
+        padding-left: 30px;
+        position: relative;
+      }
+      .process-row::before {
+        content: "";
+        position: absolute;
+        left: -6px;
+        top: 0;
+        width: 10px;
+        height: 10px;
+        background: var(--pink);
+        border-radius: 50%;
+      }
+
+      /* FOOTER */
+      footer {
+        border-top: 1px solid var(--border);
+        background: #000;
+        padding: 60px 5% 30px;
+        margin-top: 100px;
+      }
+      .f-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+      }
+      .f-col h4 {
+        color: var(--pink);
+        margin-bottom: 20px;
+      }
+      .f-link {
+        color: #666;
+        display: block;
+        margin-bottom: 10px;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+      .f-link:hover {
+        color: var(--cyan);
+        padding-left: 5px;
+      }
+
+      /* LOADER */
+      #loader {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: 2000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--cyan);
+        font-family: "Orbitron";
+        font-size: 24px;
+        letter-spacing: 5px;
+        pointer-events: none;
+        opacity: 0;
+        transition: 0.5s;
+      }
+      #loader.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          flex-direction: column;
+          text-align: center;
+          padding-top: 40px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .mobile-menu-btn {
+          display: block;
+        }
+        .hero-text h1 {
+          font-size: 42px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cursor"></div>
+    <div id="cursor-dot"></div>
+    <div id="loader">INITIALIZING SYSTEM...</div>
+
+    <nav>
+      <div class="logo hover-target" onclick="go('home')">
+        <i class="fas fa-microchip"></i> PSNS
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a onclick="go('home')" class="nav-link hover-target">HOME</a>
+        </li>
+
+        <li class="nav-item">
+          <a onclick="go('services')" class="nav-link hover-target"
+            >SERVICES <i class="fas fa-chevron-down" style="font-size: 10px"></i
+          ></a>
+          <div class="dropdown">
+            <a onclick="openService(0)">Web Design & Development</a>
+            <a onclick="openService(1)">Mobile App Development</a>
+            <a onclick="openService(2)">Testing Services</a>
+            <a onclick="openService(3)">Health Care Services</a>
+            <a onclick="openService(4)">Content Writing</a>
+            <a onclick="openService(5)">Graphic Designing</a>
+            <a onclick="openService(6)">E-Commerce</a>
+            <a onclick="openService(7)">Digital Marketing</a>
+            <a onclick="openService(8)">Non-IT Services</a>
+            <a onclick="openService(9)">HR Services</a>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a onclick="go('careers')" class="nav-link hover-target">CAREERS</a>
+        </li>
+
+        <li class="nav-item">
+          <a onclick="go('about')" class="nav-link hover-target"
+            >ABOUT <i class="fas fa-chevron-down" style="font-size: 10px"></i
+          ></a>
+          <div class="dropdown">
+            <a onclick="go('about', 'about-intro')">About Us</a>
+            <a onclick="go('about', 'about-team')">Our Team</a>
+            <a onclick="go('about', 'about-process')">How We Work</a>
+            <a onclick="go('about', 'about-pricing')">Project Pricing</a>
+            <a onclick="toggleModal()">Contact Us</a>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a onclick="go('blog')" class="nav-link hover-target">BLOG</a>
+        </li>
+      </ul>
+
+      <div style="display: flex; gap: 15px; align-items: center">
+        <button class="btn hover-target" onclick="toggleModal()">
+          GET IN TOUCH
+        </button>
+        <button
+          class="mobile-menu-btn hover-target"
+          onclick="toggleMobileMenu()"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <div id="mobile-nav">
+      <a onclick="go('home'); toggleMobileMenu()">HOME</a>
+      <a onclick="go('services'); toggleMobileMenu()">SERVICES (ALL)</a>
+      <a onclick="go('careers'); toggleMobileMenu()">CAREERS</a>
+      <a onclick="go('about'); toggleMobileMenu()">ABOUT US</a>
+      <a onclick="go('blog'); toggleMobileMenu()">BLOG</a>
+      <a onclick="toggleModal(); toggleMobileMenu()">CONTACT</a>
+    </div>
+
+    <div id="home-view" class="view-section active">
+      <header class="hero">
+        <div class="hero-text">
+          <div
+            style="
+              color: var(--yellow);
+              font-family: 'Orbitron';
+              margin-bottom: 15px;
+              font-size: 14px;
+            "
+          >
+            > SYSTEM STATUS: ONLINE
+          </div>
+          <h1>Architecting <br /><span>The Future.</span></h1>
+          <p>
+            PSNS is the dual-engine interface for the modern web. We deploy
+            enterprise-grade code and inject elite human intelligence into your
+            workforce.
+          </p>
+          <button class="btn hover-target" onclick="go('services')">
+            ACCESS MODULES
+          </button>
+        </div>
+        <div class="hero-img">
+          <img
+            src="https://cdni.iconscout.com/illustration/premium/thumb/metaverse-avatar-5368367-4494101.png"
+            alt="Cyber Avatar"
+          />
+        </div>
+      </header>
+
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid var(--border);
+          padding: 40px;
+          margin-bottom: 80px;
+        "
+      >
+        <div>
+          <div class="stat-num">50+</div>
+          <div style="color: var(--cyan)">SYSTEMS BUILT</div>
+        </div>
+        <div>
+          <div class="stat-num">99%</div>
+          <div style="color: var(--cyan)">UPTIME</div>
+        </div>
+        <div>
+          <div class="stat-num">120+</div>
+          <div style="color: var(--cyan)">OPERATORS</div>
+        </div>
+        <div>
+          <div class="stat-num">24/7</div>
+          <div style="color: var(--cyan)">SUPPORT</div>
+        </div>
+      </div>
+
+      <h2 style="text-align: center; color: var(--cyan); margin-bottom: 50px">
+        CORE MODULES
+      </h2>
+      <div class="grid" id="home-service-grid"></div>
+
+      <div style="text-align: center; margin-top: 60px">
+        <button class="btn hover-target" onclick="toggleModal()">
+          INITIATE PROJECT
+        </button>
+      </div>
+    </div>
+
+    <div id="services-view" class="view-section">
+      <h1 style="text-align: center; margin-bottom: 50px; color: var(--cyan)">
+        ALL MODULES
+      </h1>
+      <div class="grid" id="full-service-grid"></div>
+    </div>
+
+    <div id="about-view" class="view-section">
+      <div id="about-intro">
+        <h1 style="text-align: center; margin-bottom: 50px">ABOUT_US</h1>
+        <div
+          style="
+            border: 1px solid var(--pink);
+            padding: 40px;
+            background: rgba(255, 0, 255, 0.02);
+            margin-bottom: 60px;
+          "
+        >
+          <h3 style="color: var(--pink); margin-bottom: 20px">
+            > MISSION LOG 2026
+          </h3>
+          <p style="font-size: 18px; line-height: 1.8">
+            We execute code with surgical precision. Born in the digital sprawl
+            of Hyderabad, PSNS bridges the gap between synthetic intelligence
+            and human creativity. We don't just build software; we construct
+            digital ecosystems.
+          </p>
+        </div>
+      </div>
+
+      <div id="about-process" style="margin-bottom: 80px">
+        <h3 style="margin-bottom: 30px; text-align: center">
+          > EXECUTION_PROTOCOL (HOW WE WORK)
+        </h3>
+        <div class="process-row">
+          <div>
+            <h4 style="color: var(--text-main)">01. DISCOVERY</h4>
+            <p style="color: var(--text-muted)">
+              Requirements gathering and architecture.
+            </p>
+          </div>
+        </div>
+        <div class="process-row">
+          <div>
+            <h4 style="color: var(--text-main)">02. DEVELOPMENT</h4>
+            <p style="color: var(--text-muted)">
+              Agile sprints with weekly deployments.
+            </p>
+          </div>
+        </div>
+        <div class="process-row">
+          <div>
+            <h4 style="color: var(--text-main)">03. DEPLOYMENT</h4>
+            <p style="color: var(--text-muted)">
+              Live server launch and admin handover.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="about-pricing" style="margin-bottom: 80px">
+        <h3 style="margin-bottom: 30px; text-align: center">
+          > RESOURCE_ALLOCATION (PRICING)
+        </h3>
+        <div class="grid">
+          <div class="pricing-card">
+            <h4>MVP BUILD</h4>
+            <div class="price">5K Credits</div>
+            <p>Prototype / Startup</p>
+          </div>
+          <div class="pricing-card featured">
+            <h4>CORPORATE</h4>
+            <div class="price">15K Credits</div>
+            <p>Full Web Application</p>
+          </div>
+          <div class="pricing-card">
+            <h4>ENTERPRISE</h4>
+            <div class="price">CUSTOM</div>
+            <p>Complex Architecture</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="about-team">
+        <h3 style="margin-bottom: 30px; text-align: center">
+          > CORE_OPERATORS
+        </h3>
+        <div class="grid">
+          <div class="card" style="text-align: center">
+            <img
+              src="https://randomuser.me/api/portraits/men/32.jpg"
+              class="team-img"
+              alt="Team"
+            />
+            <h4>ALEX_C</h4>
+            <p>SYSTEM ARCHITECT</p>
+          </div>
+          <div class="card" style="text-align: center">
+            <img
+              src="https://randomuser.me/api/portraits/women/44.jpg"
+              class="team-img"
+              alt="Team"
+            />
+            <h4>SARAH_J</h4>
+            <p>TALENT OPS</p>
+          </div>
+          <div class="card" style="text-align: center">
+            <img
+              src="https://randomuser.me/api/portraits/men/85.jpg"
+              class="team-img"
+              alt="Team"
+            />
+            <h4>DEV_K</h4>
+            <p>CODE LEAD</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="careers-view" class="view-section">
+      <h1 style="text-align: center">RECRUITMENT PROTOCOL</h1>
+      <p
+        style="
+          text-align: center;
+          color: var(--text-muted);
+          margin-bottom: 50px;
+        "
+      >
+        Identify your role. Upload your consciousness.
+      </p>
+      <div style="max-width: 800px; margin: 0 auto">
+        <div
+          class="card hover-target"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+          "
+        >
+          <div>
+            <h3 style="color: var(--yellow); font-size: 18px">CYBER ANALYST</h3>
+            <p>REMOTE | LEVEL 4 SEC</p>
+          </div>
+          <button class="btn" style="font-size: 12px" onclick="toggleModal()">
+            APPLY
+          </button>
+        </div>
+        <div
+          class="card hover-target"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+          "
+        >
+          <div>
+            <h3 style="color: var(--cyan); font-size: 18px">REACT OPERATOR</h3>
+            <p>HYBRID | FRONTEND DIV</p>
+          </div>
+          <button class="btn" style="font-size: 12px" onclick="toggleModal()">
+            APPLY
+          </button>
+        </div>
+        <div
+          class="card hover-target"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+          "
+        >
+          <div>
+            <h3 style="color: var(--pink); font-size: 18px">UI ARCHITECT</h3>
+            <p>REMOTE | VISUAL DIV</p>
+          </div>
+          <button class="btn" style="font-size: 12px" onclick="toggleModal()">
+            APPLY
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="blog-view" class="view-section">
+      <h1 style="text-align: center; margin-bottom: 50px">NET_FEED</h1>
+      <div class="grid">
+        <div class="card hover-target">
+          <span style="color: var(--pink); font-size: 12px">2026.10.12</span>
+          <h3 style="margin-top: 10px">AI INTEGRATION</h3>
+          <p>How neural networks are rewriting the codebase.</p>
+        </div>
+        <div class="card hover-target">
+          <span style="color: var(--pink); font-size: 12px">2026.09.28</span>
+          <h3 style="margin-top: 10px">TALENT DROUGHT</h3>
+          <p>Locating elite developers in the static noise.</p>
+        </div>
+        <div class="card hover-target">
+          <span style="color: var(--pink); font-size: 12px">2026.08.15</span>
+          <h3 style="margin-top: 10px">WEB 4.0</h3>
+          <p>Decentralized identity and the future.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="detail-view" class="view-section">
+      <div
+        onclick="go('services')"
+        class="hover-target"
+        style="color: var(--cyan); margin-bottom: 20px; font-weight: 700"
+      >
+        < BACK TO MODULES
+      </div>
+      <div style="display: flex; gap: 40px; flex-wrap: wrap">
+        <div style="flex: 1; min-width: 300px">
+          <h1 id="p-title" style="color: var(--yellow); font-size: 48px">
+            SERVICE TITLE
+          </h1>
+          <p
+            id="p-desc"
+            style="
+              font-size: 18px;
+              line-height: 1.7;
+              color: var(--text-main);
+              border: 1px dashed var(--text-muted);
+              padding: 20px;
+              margin-top: 20px;
+            "
+          >
+            Desc.
+          </p>
+          <br />
+          <h3 style="color: var(--pink)">> CAPABILITIES:</h3>
+          <ul style="list-style: none; margin-top: 15px; color: #888">
+            <li style="margin-bottom: 10px">[+] 99.9% UPTIME GUARANTEE</li>
+            <li style="margin-bottom: 10px">[+] DEDICATED PROJECT MANAGER</li>
+            <li style="margin-bottom: 10px">[+] 24/7 SUPPORT</li>
+          </ul>
+          <br />
+          <button onclick="toggleModal()" class="btn hover-target">
+            INITIATE PROJECT
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="f-grid">
+        <div>
+          <h3 style="color: white">
+            PSNS<span style="color: var(--cyan)"></span>
+          </h3>
+          <p style="color: #666; font-size: 14px; margin-top: 10px">
+            Hyderabad Node // Sector 7
+          </p>
+        </div>
+        <div>
+          <h4 style="color: var(--pink)">NAVIGATE</h4>
+          <a onclick="go('about')" class="f-link hover-target">DATABASE</a
+          ><a onclick="go('careers')" class="f-link hover-target">JOIN</a>
+        </div>
+        <div>
+          <h4 style="color: var(--pink)">MODULES</h4>
+          <a onclick="go('services')" class="f-link hover-target">WEB_DEV</a
+          ><a onclick="go('services')" class="f-link hover-target">SEC_OPS</a>
+        </div>
+        <div>
+          <h4 style="color: var(--pink)">CONTACT</h4>
+          <a class="f-link hover-target">contact@PSNS.com</a>
+        </div>
+      </div>
+      <div
+        style="
+          text-align: center;
+          margin-top: 40px;
+          color: #444;
+          font-size: 12px;
+          border-top: 1px solid #222;
+          padding-top: 20px;
+        "
+      >
+        SYSTEM ALL GREEN // 2026
+      </div>
+    </footer>
+
+    <div
+      id="modal"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 3000;
+      "
+    >
+      <div
+        style="
+          background: #0a0a12;
+          border: 1px solid var(--cyan);
+          padding: 40px;
+          width: 90%;
+          max-width: 500px;
+          position: relative;
+          box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+        "
+      >
+        <button
+          onclick="toggleModal()"
+          class="hover-target"
+          style="
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            border: none;
+            background: none;
+            color: var(--pink);
+            font-size: 24px;
+          "
+        >
+          X
+        </button>
+        <h2 style="color: var(--cyan); margin-bottom: 20px">
+          ESTABLISH UPLINK
+        </h2>
+        <input
+          type="text"
+          placeholder="IDENTITY"
+          style="
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #000;
+            border: 1px solid #333;
+            color: white;
+            font-family: 'Rajdhani';
+          "
+        />
+        <input
+          type="email"
+          placeholder="CONTACT_FREQ"
+          style="
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #000;
+            border: 1px solid #333;
+            color: white;
+            font-family: 'Rajdhani';
+          "
+        />
+        <textarea
+          placeholder="DATA PACKET..."
+          style="
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #000;
+            border: 1px solid #333;
+            color: white;
+            height: 100px;
+            font-family: 'Rajdhani';
+          "
+        ></textarea>
+        <button class="btn hover-target" style="width: 100%">TRANSMIT</button>
+      </div>
+    </div>
+
+    <script>
+      // 1. EXACT SERVICE LIST FROM REQUEST
+      const services = [
+        {
+          t: "Web Design And Development",
+          i: "fa-code",
+          d: "Scalable websites and web apps.",
+        },
+        {
+          t: "Mobile Application Development",
+          i: "fa-mobile-alt",
+          d: "iOS and Android native solutions.",
+        },
+        {
+          t: "Testing Services",
+          i: "fa-vial",
+          d: "QA and Automated testing protocols.",
+        },
+        {
+          t: "Health Care Services",
+          i: "fa-heartbeat",
+          d: "HIPAA compliant medical software.",
+        },
+        {
+          t: "Content Writing And Moderation",
+          i: "fa-pen-nib",
+          d: "SEO content and community management.",
+        },
+        {
+          t: "Graphic Designing",
+          i: "fa-palette",
+          d: "Visual identity and UI/UX design.",
+        },
+        {
+          t: "E-Commerce",
+          i: "fa-shopping-cart",
+          d: "Online stores and payment gateways.",
+        },
+        {
+          t: "Digital Marketing",
+          i: "fa-bullhorn",
+          d: "Growth hacking and SEO strategies.",
+        },
+        {
+          t: "Non-IT Services",
+          i: "fa-briefcase",
+          d: "Operational support and logistics.",
+        },
+        {
+          t: "HR Services",
+          i: "fa-users",
+          d: "Recruitment and Staff Augmentation.",
+        },
+      ];
+
+      // 2. RENDER GRIDS
+      const homeGrid = document.getElementById("home-service-grid");
+      const fullGrid = document.getElementById("full-service-grid");
+
+      // Render first 4 for Home
+      services
+        .slice(0, 4)
+        .forEach((s, i) => (homeGrid.innerHTML += createCard(s, i)));
+      // Render All for Services Page
+      services.forEach((s, i) => (fullGrid.innerHTML += createCard(s, i)));
+
+      function createCard(s, i) {
+        return `<div class="card hover-target" onclick="openService(${i})">
+                <div class="card-icon"><i class="fas ${s.i}"></i></div>
+                <h3>${s.t}</h3>
+                <p>${s.d}</p>
+            </div>`;
+      }
+
+      // 3. NAVIGATION LOGIC
+      function go(view, anchorId = null) {
+        const loader = document.getElementById("loader");
+        loader.classList.add("active");
+        setTimeout(() => {
+          document
+            .querySelectorAll(".view-section")
+            .forEach((el) => el.classList.remove("active"));
+          document.getElementById(view + "-view").classList.add("active");
+
+          if (anchorId) {
+            const element = document.getElementById(anchorId);
+            if (element) element.scrollIntoView({ behavior: "smooth" });
+          } else {
+            window.scrollTo(0, 0);
+          }
+
+          loader.classList.remove("active");
+        }, 500);
+      }
+
+      function openService(index) {
+        const s = services[index];
+        document.getElementById("p-title").innerText = s.t;
+        document.getElementById("p-desc").innerText =
+          s.d +
+          " // FULL SYSTEM ACCESS GRANTED. OUR TEAM IS READY TO DEPLOY THIS MODULE.";
+        go("detail");
+      }
+
+      function toggleModal() {
+        const m = document.getElementById("modal");
+        m.style.display = m.style.display === "flex" ? "none" : "flex";
+      }
+
+      function toggleMobileMenu() {
+        document.getElementById("mobile-nav").classList.toggle("active");
+      }
+
+      // 4. CURSOR LOGIC
+      document.addEventListener("mousemove", (e) => {
+        const cursor = document.getElementById("cursor");
+        const dot = document.getElementById("cursor-dot");
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+        dot.style.left = e.clientX + "px";
+        dot.style.top = e.clientY + "px";
+      });
+      document.body.addEventListener("mouseover", (e) => {
+        if (
+          e.target.closest(".hover-target") ||
+          e.target.closest("a") ||
+          e.target.closest("button")
+        ) {
+          document.body.classList.add("hovering");
+        }
+      });
+      document.body.addEventListener("mouseout", () =>
+        document.body.classList.remove("hovering")
+      );
+    </script>
+  </body>
+</html>
